@@ -162,6 +162,15 @@ export async function generateTagsAction(
   userId: string
 ): Promise<TagResponse> {
   try {
+    // 환경 변수 확인
+    if (!process.env.GEMINI_API_KEY) {
+      console.warn('[AI Action] GEMINI_API_KEY가 설정되지 않아 태그 생성을 건너뜁니다.');
+      return {
+        success: false,
+        error: 'AI 서비스가 설정되지 않았습니다.'
+      };
+    }
+
     // 입력 검증
     if (!noteId || !content || !userId) {
       return {
@@ -403,6 +412,15 @@ export async function generateSummaryAction(
   userId: string
 ): Promise<SummaryResponse> {
   try {
+    // 환경 변수 확인
+    if (!process.env.GEMINI_API_KEY) {
+      console.warn('[AI Action] GEMINI_API_KEY가 설정되지 않아 요약 생성을 건너뜁니다.');
+      return {
+        success: false,
+        error: 'AI 서비스가 설정되지 않았습니다.'
+      };
+    }
+
     // 입력 검증
     if (!noteId || !content || !userId) {
       return {

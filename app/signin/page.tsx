@@ -3,12 +3,13 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
-async function SuccessMessage({
+async function StatusMessage({
     searchParams
 }: {
-    searchParams: Promise<{ message?: string }>
+    searchParams: Promise<{ message?: string; error?: string }>
 }) {
     const params = await searchParams
+    
     if (params.message === 'password-updated') {
         return (
             <div className="mb-4 p-3 text-sm text-green-600 bg-green-50 border border-green-200 rounded-md">
@@ -17,13 +18,36 @@ async function SuccessMessage({
             </div>
         )
     }
+    
+    if (params.error) {
+        let errorMessage = '로그인 중 오류가 발생했습니다.'
+        
+        switch (params.error) {
+            case 'auth-failed':
+                errorMessage = '인증에 실패했습니다. 다시 로그인해주세요.'
+                break
+            case 'not-authenticated':
+                errorMessage = '로그인이 필요합니다.'
+                break
+            case 'server-error':
+                errorMessage = '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
+                break
+        }
+        
+        return (
+            <div className="mb-4 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+                ⚠️ {errorMessage}
+            </div>
+        )
+    }
+    
     return null
 }
 
 export default async function SignInPage({
     searchParams
 }: {
-    searchParams: Promise<{ message?: string }>
+    searchParams: Promise<{ message?: string; error?: string }>
 }) {
     // 이미 로그인된 사용자는 대시보드로 리다이렉트
     const supabase = await createClient()
@@ -45,7 +69,7 @@ export default async function SignInPage({
                     <p className="text-gray-600">다시 만나서 반갑습니다</p>
                 </div>
                 <Suspense fallback={null}>
-                    <SuccessMessage searchParams={searchParams} />
+                    <StatusMessage searchParams={searchParams} />
                 </Suspense>
                 <SignInForm />
             </div>

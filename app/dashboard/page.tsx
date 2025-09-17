@@ -19,15 +19,38 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     // searchParams를 await
     const params = await searchParams
     
-    // 로그인 확인
+    // 로그인 확인 - 더 견고한 인증 체크
     const supabase = await createClient()
-    const {
-        data: { user },
-        error
-    } = await supabase.auth.getUser()
+    let user: any = null
+    
+    try {
+        const {
+            data: { user: authUser },
+            error
+        } = await supabase.auth.getUser()
 
-    if (error || !user) {
-        redirect('/signin')
+        // 인증 오류 또는 사용자가 없는 경우
+        if (error) {
+            console.error('인증 오류:', error)
+            redirect('/signin?error=auth-failed')
+        }
+
+        if (!authUser) {
+            console.log('사용자가 로그인되지 않음')
+            redirect('/signin?error=not-authenticated')
+        }
+
+        // 이메일 인증 확인
+        if (!authUser.email_confirmed_at) {
+            console.log('이메일 인증이 완료되지 않음')
+            redirect('/auth/verify-email')
+        }
+
+        user = authUser
+        console.log('사용자 인증 성공:', user.email)
+    } catch (error) {
+        console.error('인증 체크 중 오류:', error)
+        redirect('/signin?error=server-error')
     }
 
     // 페이지 번호 파싱 (기본값: 1)

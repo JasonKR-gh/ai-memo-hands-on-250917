@@ -13,7 +13,7 @@ import { LogoutDialog } from '@/components/auth/logout-dialog'
 import { PenTool, Search, Tag, Download } from 'lucide-react'
 
 export default async function HomePage() {
-    // 로그인 확인 - getUser()를 사용하여 서버에서 인증 확인
+    // 로그인 상태 확인 (선택적)
     const supabase = await createClient()
     
     const {

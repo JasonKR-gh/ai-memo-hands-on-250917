@@ -21,6 +21,17 @@ export function NoteForm() {
     try {
       setIsLoading(true)
       setError(null)
+      
+      // 폼 데이터 검증
+      const title = formData.get('title') as string
+      const content = formData.get('content') as string
+      
+      if (!title?.trim() && !content?.trim()) {
+        setError('제목 또는 내용을 입력해주세요.')
+        setIsLoading(false)
+        return
+      }
+      
       const result = await createNote(formData)
       
       if (result?.success) {
@@ -31,7 +42,21 @@ export function NoteForm() {
         setIsLoading(false)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.')
+      console.error('노트 저장 오류:', err)
+      
+      // 에러 타입별 처리
+      if (err instanceof Error) {
+        if (err.message.includes('인증')) {
+          setError('로그인이 필요합니다. 다시 로그인해주세요.')
+        } else if (err.message.includes('데이터베이스')) {
+          setError('데이터베이스 연결에 문제가 있습니다. 잠시 후 다시 시도해주세요.')
+        } else {
+          setError(err.message)
+        }
+      } else {
+        setError('알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+      }
+      
       setIsLoading(false)
     }
   }

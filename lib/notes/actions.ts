@@ -58,11 +58,14 @@ export async function createNote(formData: FormData) {
     
     if (noteContent && noteContent.trim().length > 0) {
       // AI 처리를 백그라운드에서 실행 (사용자 대기 없이)
-      Promise.all([
-        generateSummaryAction(noteId, noteContent, user.id),
-        generateTagsAction(noteId, noteContent, user.id)
-      ]).catch(error => {
-        console.error('AI 처리 중 오류 발생:', error)
+      // 각 AI 액션을 개별적으로 실행하여 하나가 실패해도 다른 것이 계속 실행되도록 함
+      generateSummaryAction(noteId, noteContent, user.id).catch(error => {
+        console.error('AI 요약 생성 중 오류 발생:', error)
+        // AI 처리 실패는 사용자에게 알리지 않고 로그만 남김
+      })
+      
+      generateTagsAction(noteId, noteContent, user.id).catch(error => {
+        console.error('AI 태그 생성 중 오류 발생:', error)
         // AI 처리 실패는 사용자에게 알리지 않고 로그만 남김
       })
     }
