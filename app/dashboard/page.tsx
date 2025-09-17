@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getNotesList } from '@/lib/notes/actions'
 import { DashboardClient } from '@/components/dashboard/dashboard-client'
+import type { User } from '@supabase/supabase-js'
 
 interface DashboardPageProps {
   searchParams: Promise<{
@@ -21,7 +22,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     
     // 로그인 확인 - 더 견고한 인증 체크
     const supabase = await createClient()
-    let user: any = null
+    let user: User | null = null
     
     try {
         const {
