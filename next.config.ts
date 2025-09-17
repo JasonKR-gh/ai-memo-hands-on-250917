@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
     GEMINI_TIMEOUT_MS: process.env.GEMINI_TIMEOUT_MS,
   },
   serverExternalPackages: ['@google/genai', 'postgres'],
+  // Vercel 배포 시 리다이렉트 문제 해결
+  trailingSlash: false,
+  async redirects() {
+    return []
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       // 클라이언트 사이드에서 Node.js 내장 모듈들을 제외

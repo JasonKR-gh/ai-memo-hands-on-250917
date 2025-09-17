@@ -5,7 +5,7 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { generateTagsAction, generateTagsTestAction, getTagsAction } from '@/lib/ai/actions'
-import { createOrUpdateTags, getTagsByNoteId, deleteTags } from '@/lib/notes/queries'
+import { createOrUpdateTags } from '@/lib/notes/queries'
 
 // Mock dependencies
 vi.mock('@/lib/ai/gemini-client', () => ({
@@ -65,7 +65,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockResolvedValue('AI, Machine Learning, Technology, Innovation, Data Science, Algorithms')
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
       vi.mocked(createOrUpdateTags).mockResolvedValue(mockTags)
 
@@ -136,7 +136,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockRejectedValue(new Error('API Error'))
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
 
       // Act
@@ -159,7 +159,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockResolvedValue('')
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
 
       // Act
@@ -182,7 +182,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockResolvedValue('Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7, Tag8')
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
       vi.mocked(createOrUpdateTags).mockResolvedValue(mockTags)
 
@@ -207,7 +207,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockResolvedValue('AI, Machine Learning, Technology')
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
 
       // Act
       const result = await generateTagsTestAction('This is a test note about AI.')
@@ -287,7 +287,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockResolvedValue('AI, Machine Learning, Technology, Innovation')
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
       vi.mocked(createOrUpdateTags).mockResolvedValue(mockTags)
 
@@ -317,7 +317,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockResolvedValue(' AI , Machine Learning , Technology ')
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
       vi.mocked(createOrUpdateTags).mockResolvedValue(mockTags)
 
@@ -344,7 +344,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockResolvedValue('AI, , Machine Learning, , Technology')
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
       vi.mocked(createOrUpdateTags).mockResolvedValue(mockTags)
 
@@ -373,7 +373,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockRejectedValue(new Error('fetch failed'))
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
 
       // Act
@@ -396,7 +396,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockRejectedValue(new Error('API_KEY invalid'))
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
 
       // Act
@@ -419,7 +419,7 @@ describe('AI Tag Generation', () => {
       const mockClient = {
         generateText: vi.fn().mockRejectedValue(new Error('quota exceeded'))
       }
-      vi.mocked(getGeminiClient).mockReturnValue(mockClient as any)
+      vi.mocked(getGeminiClient).mockReturnValue(mockClient as unknown as ReturnType<typeof getGeminiClient>)
       vi.mocked(getNoteById).mockResolvedValue(mockNote)
 
       // Act

@@ -19,13 +19,20 @@ export function SessionInitializer() {
             // 빌드가 새로 되었거나 첫 접속인 경우
             if (!lastBuildTimestamp || lastBuildTimestamp !== BUILD_TIMESTAMP) {
                 const supabase = createClient()
-                await supabase.auth.signOut()
+                
+                // 현재 세션 상태 확인
+                const { data: { session } } = await supabase.auth.getSession()
+                
+                // 세션이 있는 경우에만 로그아웃
+                if (session) {
+                    await supabase.auth.signOut()
+                }
                 
                 // 현재 빌드 타임스탬프 저장
                 localStorage.setItem('lastBuildTimestamp', BUILD_TIMESTAMP)
                 
-                // 홈페이지로 리다이렉트
-                window.location.href = '/'
+                // 리다이렉트 제거 - 무한 루프 방지
+                // window.location.href = '/'
             }
         }
         

@@ -22,7 +22,9 @@ describe('GeminiClient', () => {
 
   beforeEach(() => {
     // 환경변수 모킹
-    vi.stubEnv(mockEnv);
+    Object.entries(mockEnv).forEach(([key, value]) => {
+      vi.stubEnv(key, value);
+    });
     
     // GoogleGenAI 모킹
     vi.mock('@google/genai', () => ({
@@ -98,7 +100,9 @@ describe('GeminiClient Error Handling', () => {
 
   beforeEach(() => {
     // 환경변수 모킹
-    vi.stubEnv(mockEnv);
+    Object.entries(mockEnv).forEach(([key, value]) => {
+      vi.stubEnv(key, value);
+    });
     
     // GoogleGenAI 모킹
     vi.mock('@google/genai', () => ({

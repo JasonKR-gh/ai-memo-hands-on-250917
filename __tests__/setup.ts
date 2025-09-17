@@ -5,7 +5,10 @@
 import { vi } from 'vitest';
 
 // 환경변수 기본값 설정
-process.env.NODE_ENV = 'test';
+Object.defineProperty(process.env, 'NODE_ENV', {
+  value: 'test',
+  writable: true
+});
 process.env.GEMINI_API_KEY = 'test-api-key';
 process.env.GEMINI_MODEL = 'gemini-2.0-flash-001';
 process.env.GEMINI_MAX_TOKENS = '8192';

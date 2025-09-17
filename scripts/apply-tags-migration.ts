@@ -55,7 +55,7 @@ async function applyTagsMigration() {
     `)
     
     console.log('📋 테이블 컬럼 정보:')
-    columns.forEach((col: any) => {
+    columns.forEach((col: Record<string, unknown>) => {
       console.log(`   - ${col.column_name}: ${col.data_type} (nullable: ${col.is_nullable})`)
     })
     console.log()
